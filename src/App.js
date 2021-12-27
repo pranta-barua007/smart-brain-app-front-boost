@@ -51,7 +51,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const token = window.sessionStorage.getItem('token');
+    const token = window.localStorage.getItem('token');
     if (token) {
       fetch(`${SMART_BRAIN_API_URL}/signin`, {
         method: 'POST',
@@ -126,7 +126,7 @@ class App extends Component {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': window.sessionStorage.getItem('token')
+          'Authorization': window.localStorage.getItem('token')
         },
         body: JSON.stringify({
           input: this.state.input
@@ -139,7 +139,7 @@ class App extends Component {
             method: 'put',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': window.sessionStorage.getItem('token')
+              'Authorization': window.localStorage.getItem('token')
             },
             body: JSON.stringify({
               id: this.state.user.id

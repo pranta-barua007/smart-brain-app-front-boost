@@ -17,7 +17,7 @@ class Profile extends Component {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': window.sessionStorage.getItem('token')
+        'Authorization': window.localStorage.getItem('token')
       },
       body: JSON.stringify({
         formInput: data
