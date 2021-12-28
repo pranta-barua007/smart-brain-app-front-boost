@@ -11,6 +11,7 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
 import Profile from './components/Profile/Profile';
 import Modal from './components/Modal/Modal';
+import Spinner from './components/Spinner/Spinner';
 import './App.css';
 
 const particlesOptions = {
@@ -41,7 +42,8 @@ const initialState = {
     joined: '',
     age: 0,
     pet: ''
-  }
+  },
+  isLoading: false
 }
 
 class App extends Component {
@@ -53,6 +55,7 @@ class App extends Component {
   componentDidMount() {
     const token = window.localStorage.getItem('token');
     if (token) {
+      this.setState({isLoading: true});
       fetch(`${SMART_BRAIN_API_URL}/signin`, {
         method: 'POST',
         headers: {
@@ -76,10 +79,13 @@ class App extends Component {
                 this.loadUser(user)
                 this.onRouteChange('home');
               }
+              this.setState({isLoading: false});
             })
           }
         })
-        .catch(console.log)
+        .catch((err) => {
+          this.setState({ isLoading: false });
+          console.log(err)});
     }
   }
 
@@ -174,8 +180,8 @@ class App extends Component {
   }
 
   render() {
-    const { isSignedIn, imageUrl, route, boxes, isProfileOpen, user } = this.state;
-    return (
+    const { isSignedIn, imageUrl, route, boxes, isProfileOpen, user, isLoading } = this.state;
+    return isLoading ? <Spinner subText='Loading User...'/> : (
       <div className="App">
         <Particles className='particles'
           params={particlesOptions}
