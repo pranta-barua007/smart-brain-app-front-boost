@@ -46,7 +46,11 @@ class Signin extends React.Component {
           this.props.loadUser(data.user);
           this.props.onRouteChange("home");
         }else {
-          this.setState({errorText: data});
+          if(Object.keys(data).length === 0) {
+            this.setState({errorText : "User not found"})
+          }else{
+            this.setState({errorText: data});
+          }
         }
         this.setState({ isLoading: false });
       })
