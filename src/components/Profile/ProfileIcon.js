@@ -5,6 +5,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
+import SMART_BRAIN_API_URL from "../../api/api";
 
 class ProfileIcon extends React.Component {
   constructor(props) {
@@ -19,6 +20,28 @@ class ProfileIcon extends React.Component {
       dropdownOpen: !this.state.dropdownOpen,
     });
   };
+
+  handleLogout = () => {
+    const token = window.localStorage.getItem('token');
+    if (token) {
+    fetch(`${SMART_BRAIN_API_URL}/logout`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+      if(data.success === 'true') {
+        window.localStorage.clear();
+        return this.props.onRouteChange("signout");
+      }
+    })
+    .catch(err => console.log)
+    }
+  }
 
   render() {
     return (
@@ -52,10 +75,7 @@ class ProfileIcon extends React.Component {
               View Profile
             </DropdownItem>
             <DropdownItem
-              onClick={() => {
-                window.localStorage.clear();
-                return this.props.onRouteChange("signout");
-              }}
+              onClick={this.handleLogout}
             >
               Sign Out
             </DropdownItem>

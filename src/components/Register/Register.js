@@ -30,6 +30,10 @@ class Register extends React.Component {
     this.setState({ errorText: '' });
   }
 
+  saveAuthTokenInSessions = (token) => {
+    window.localStorage.setItem("token", token);
+  };
+
   onSubmitRegister = (e) => {
     e.preventDefault();
     this.setState({isLoading: true});
@@ -43,7 +47,9 @@ class Register extends React.Component {
       })
     })
       .then(response => response.json())
-      .then(user => {
+      .then(data => {
+        const {user, token} = data;
+        this.saveAuthTokenInSessions(token);
         if (user.id) {
           this.props.loadUser(user)
           this.props.onRouteChange('home');
